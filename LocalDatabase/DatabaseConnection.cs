@@ -1,13 +1,14 @@
 ﻿using CarDealership.Models;
 using System.Data.SqlClient;
 using CarDealership.StaticVariables;
+using CarDealership.SortStrategy;
 
 namespace CarDealership.LocalDatabase
 {
     class DatabaseConnection
     {
         const string connectionString = DatabaseStrings.DatabaseConnection;
-        static public void DisplayCars()
+        static public void DisplayCars(ISortStrategy sortStrategy = null) 
         {
             try
             {
@@ -15,6 +16,11 @@ namespace CarDealership.LocalDatabase
 
                 if (cars != null)
                 {
+                    if (sortStrategy != null) 
+                    {
+                        cars = sortStrategy.Sort(cars); 
+                    }
+
                     foreach (Car car in cars)
                     {
                         car.DisplayDetails(Dealership.selectedCurrency);
